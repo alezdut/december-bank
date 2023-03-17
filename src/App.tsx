@@ -12,7 +12,7 @@ const router = createBrowserRouter([
     element: <Root />,
     errorElement: <PrivateRoute component={Home} />,
     children: [
-      { path: 'home', element: <PrivateRoute component={Home} /> },
+      { path: '', element: <PrivateRoute component={Home} /> },
       { path: 'login', element: <Auth /> },
       { path: 'register', element: <Register /> },
     ],

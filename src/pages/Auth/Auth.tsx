@@ -36,6 +36,7 @@ function Auth() {
       try {
         const loginData = await postLogin(values);
         dispatch(startSession(loginData));
+        sessionStorage.setItem('accessToken', loginData.token);
         navigate('/home');
       } catch (e: any) {
         dispatch(setError(e?.response?.data.errors[0]));

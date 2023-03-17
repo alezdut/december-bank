@@ -1,0 +1,19 @@
+.card {
+    display: 'flex';
+    margin: '1vw';
+}
+
+@media screen and (max-width: 70em) {
+    .card {
+        width: '80%';
+    }
+}
+
+.cardContent {
+    display: 'flex';
+    flex-direction: 'column';
+    justify-content: 'space-between';
+    align-content: 'center';
+    height: '100%';
+    width: '100%';
+  }
