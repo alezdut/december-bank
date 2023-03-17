@@ -1,4 +1,9 @@
 export interface AccountPayload {
+  user: {
+    id: number;
+    name: string;
+    email: string;
+  };
   accounts: {
     id: number;
     balance: number;

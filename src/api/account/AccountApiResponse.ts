@@ -10,6 +10,18 @@ export interface account {
   };
 }
 
+export interface userInfo {
+  id: number;
+  name: string;
+  email: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface userInfoResponse {
+  data: userInfo;
+}
+
 export interface accountResponse {
   data: account[];
   errors: string[];
