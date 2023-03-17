@@ -76,7 +76,7 @@ function Auth() {
           error={formik.touched.password && Boolean(formik.errors.password)}
           helperText={formik.touched.password && formik.errors.password}
         />
-        {error !== '' && (
+        {error && (
           <div className={styles.errorMessage}>
             <p>{error}</p>
           </div>

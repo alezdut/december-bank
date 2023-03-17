@@ -1,17 +1,11 @@
 import axios from 'axios';
-import {
-  postLoginResponse,
-  postCreateUserResponse,
-  loginResponse,
-} from './SessionApiResponse';
-import { postCreateUserRequest, postLoginRequest } from './SessionApiRequest';
+import { loginResponse, createUserResponse, login } from './SessionApiResponse';
+import { createUserRequest, loginRequest } from './SessionApiRequest';
 
-const baseUrl = 'https://decemberbank.inhouse.decemberlabs.com/api';
+const baseUrl = process.env.REACT_APP_BASE_URL;
 
-export const postLogin = async (
-  request: postLoginRequest,
-): Promise<loginResponse> => {
-  const { data } = await axios.post<postLoginResponse>(
+export const postLogin = async (request: loginRequest): Promise<login> => {
+  const { data } = await axios.post<loginResponse>(
     `${baseUrl}/users/login`,
     request,
     {
@@ -24,9 +18,9 @@ export const postLogin = async (
 };
 
 export const postCreateUser = async (
-  request: postCreateUserRequest,
-): Promise<loginResponse> => {
-  const { data } = await axios.post<postCreateUserResponse>(
+  request: createUserRequest,
+): Promise<login> => {
+  const { data } = await axios.post<createUserResponse>(
     `${baseUrl}/users`,
     request,
     {

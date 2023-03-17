@@ -111,7 +111,7 @@ function Auth() {
             formik.touched.confirmPassword && formik.errors.confirmPassword
           }
         />
-        {error !== '' && (
+        {error && (
           <div className={styles.errorMessage}>
             <p>{error}</p>
           </div>
