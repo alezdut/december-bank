@@ -4,6 +4,7 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import CURRENCY_SYMBOL from '../constants/currencySymbol';
+import style from './AccountCard.module.css';
 
 function AccountCard({ account }: any) {
   const {
@@ -18,27 +19,14 @@ function AccountCard({ account }: any) {
 
   return (
     <Card
+      className={style.card}
       sx={{
-        display: 'flex',
-        '@media screen and (max-width: 70em)': {
-          width: '80%',
-        },
-        width: '15vw',
         minWidth: '320px',
         margin: '1vw',
       }}
       key={id}
     >
-      <CardContent
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          alignContent: 'center',
-          height: '100%',
-          width: '80%',
-        }}
-      >
+      <CardContent>
         <Typography
           sx={{
             fontSize: 14,

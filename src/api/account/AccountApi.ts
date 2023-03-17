@@ -5,7 +5,7 @@ import {
   transactionsResponse,
 } from './AccountApiResponse';
 
-const baseUrl = 'https://decemberbank.inhouse.decemberlabs.com/api';
+const baseUrl = process.env.REACT_APP_BASE_URL;
 
 export const getAccounts = async (): Promise<account[]> => {
   const token = sessionStorage.getItem('accessToken');
