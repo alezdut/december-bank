@@ -13,15 +13,24 @@ function Home() {
   const dispatch = useAppDispatch();
   const accounts = useAppSelector((state) => state.account);
 
+  const boxStyle = {
+    width: '50%',
+    marginLeft: '25%',
+    marginRight: '25%',
+    height: '5vh',
+  };
+
+  const getAccountData = async () => {
+    try {
+      const acc = await getAccounts();
+      dispatch(loadAccounts(acc));
+    } catch (e: any) {
+      dispatch(unLoadAccount());
+    }
+  };
+
   useEffect(() => {
-    (async () => {
-      try {
-        const acc = await getAccounts();
-        dispatch(loadAccounts(acc));
-      } catch (e: any) {
-        dispatch(unLoadAccount());
-      }
-    })();
+    getAccountData();
   }, []);
 
   return (
@@ -29,11 +38,8 @@ function Home() {
       <Header />
       <Box
         sx={{
-          width: '50%',
-          marginLeft: '25%',
-          marginRight: '25%',
+          ...boxStyle,
           marginTop: '10vh',
-          height: '5vh',
         }}
       >
         <Typography variant="h4" gutterBottom>
@@ -60,11 +66,8 @@ function Home() {
       </Container>
       <Box
         sx={{
-          width: '50%',
-          marginLeft: '25%',
-          marginRight: '25%',
+          ...boxStyle,
           marginTop: '1vh',
-          height: '5vh',
         }}
       >
         <Typography variant="h4" gutterBottom>

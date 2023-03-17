@@ -48,7 +48,7 @@ export default function TransactionList() {
     totalPages: 0,
     totalRows: 0,
   });
-  const [rows, setRows] = useState<GridRowsProp>([]);
+  const [transactions, setTransactions] = useState<GridRowsProp>([]);
   const [loading, setLoading] = useState(false);
 
   const getData = async (active: boolean) => {
@@ -59,19 +59,18 @@ export default function TransactionList() {
       ...sortModel,
     });
 
-    if (!active) {
-      return;
+    if (active) {
+      setPaginationInfo(pagination);
+      if (data !== transactions) {
+        setTransactions(data);
+      }
+      setLoading(false);
     }
-    setPaginationInfo(pagination);
-    if (data !== rows) {
-      setRows(data);
-    }
-    setLoading(false);
   };
 
   useEffect(() => {
     let active = true;
-    const interval = setInterval(() => getData(active), 100000);
+    const interval = setInterval(() => getData(active), 60000);
     getData(active);
 
     return () => {
@@ -99,7 +98,7 @@ export default function TransactionList() {
           justifyContent: 'space-between',
         }}
         autoHeight
-        rows={rows}
+        rows={transactions}
         disableColumnFilter
         disableColumnMenu
         columns={columns}
