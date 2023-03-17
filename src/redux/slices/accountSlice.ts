@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { accountResponse } from '../../api/account/AccountApiResponse';
+import { account } from '../../api/account/AccountApiResponse';
 import { AccountPayload } from '../types/account';
 
 const intialState: AccountPayload = {
@@ -22,7 +22,7 @@ const sessionSlice = createSlice({
   name: 'session',
   initialState: intialState,
   reducers: {
-    loadAccounts: (state, { payload }: PayloadAction<accountResponse[]>) => ({
+    loadAccounts: (state, { payload }: PayloadAction<account[]>) => ({
       ...state,
       accounts: payload,
     }),

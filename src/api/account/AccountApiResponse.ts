@@ -1,4 +1,4 @@
-export interface accountResponse {
+export interface account {
   id: number;
   balance: number;
   owner_id: number;
@@ -10,12 +10,12 @@ export interface accountResponse {
   };
 }
 
-export interface getAccountResponse {
-  data: accountResponse[];
+export interface accountResponse {
+  data: account[];
   errors: string[];
 }
 
-export interface transactionsResponse {
+export interface transactions {
   id: number;
   description: string;
   amount: number;
@@ -36,8 +36,8 @@ export interface transactionPagination {
   totalRows: number;
 }
 
-export interface getTransactionsResponse {
-  data: transactionsResponse[];
+export interface transactionsResponse {
+  data: transactions[];
   pagination: transactionPagination;
   errors: string[];
 }

@@ -1,5 +1,7 @@
 import Container from '@mui/material/Container';
 import { useEffect } from 'react';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 import { getAccounts } from '../api/account/AccountApi';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { loadAccounts, unLoadAccount } from '../redux/slices/accountSlice';
@@ -25,11 +27,24 @@ function Home() {
   return (
     <>
       <MainAppBar />
+      <Box
+        sx={{
+          width: '50%',
+          marginLeft: '25%',
+          marginRight: '25%',
+          marginTop: '10vh',
+          height: '5vh',
+        }}
+      >
+        <Typography variant="h4" gutterBottom>
+          Cuentas
+        </Typography>
+      </Box>
       <Container
         maxWidth="md"
         sx={{
           display: 'flex',
-          marginTop: '10vh',
+          marginTop: '1vh',
           width: '80vw',
           '@media screen and (max-width: 70em)': {
             flexDirection: 'column',
@@ -43,6 +58,19 @@ function Home() {
           <AccountCard account={a} key={a.id} />
         ))}
       </Container>
+      <Box
+        sx={{
+          width: '50%',
+          marginLeft: '25%',
+          marginRight: '25%',
+          marginTop: '1vh',
+          height: '5vh',
+        }}
+      >
+        <Typography variant="h4" gutterBottom>
+          Transacciones
+        </Typography>
+      </Box>
       <Container
         maxWidth="md"
         sx={{

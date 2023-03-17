@@ -1,16 +1,16 @@
 import axios from 'axios';
 import {
+  account,
   accountResponse,
-  getAccountResponse,
-  getTransactionsResponse,
+  transactionsResponse,
 } from './AccountApiResponse';
 
 const baseUrl = 'https://decemberbank.inhouse.decemberlabs.com/api';
 
-export const getAccounts = async (): Promise<accountResponse[]> => {
+export const getAccounts = async (): Promise<account[]> => {
   const token = sessionStorage.getItem('accessToken');
 
-  const { data } = await axios.get<getAccountResponse>(`${baseUrl}/accounts`, {
+  const { data } = await axios.get<accountResponse>(`${baseUrl}/accounts`, {
     headers: {
       Accept: 'application/json',
       Authorization: `Bearer ${token}`,
@@ -21,10 +21,10 @@ export const getAccounts = async (): Promise<accountResponse[]> => {
 
 export const getTransactions = async (
   params?: any,
-): Promise<getTransactionsResponse> => {
+): Promise<transactionsResponse> => {
   const token = sessionStorage.getItem('accessToken');
   const { page, pageSize, field, sort } = params;
-  const { data } = await axios.get<getTransactionsResponse>(
+  const { data } = await axios.get<transactionsResponse>(
     `${baseUrl}/transactions`,
     {
       headers: {
