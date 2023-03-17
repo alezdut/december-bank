@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { loginResponse } from '../../api/session/SessionApiResponse';
+import { login } from '../../api/session/SessionApiResponse';
 import { SessionPayload } from '../types/session';
 
 const intialState: SessionPayload = {
@@ -12,7 +12,7 @@ const sessionSlice = createSlice({
   name: 'session',
   initialState: intialState,
   reducers: {
-    startSession: (state, { payload }: PayloadAction<loginResponse>) => ({
+    startSession: (state, { payload }: PayloadAction<login>) => ({
       ...state,
       accessToken: payload.token,
       isAuthenticated: true,
