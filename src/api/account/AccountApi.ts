@@ -3,9 +3,11 @@ import {
   account,
   accountResponse,
   transactionsResponse,
+  userInfo,
+  userInfoResponse,
 } from './AccountApiResponse';
 
-const baseUrl = 'https://decemberbank.inhouse.decemberlabs.com/api';
+const baseUrl = process.env.REACT_APP_BASE_URL;
 
 export const getAccounts = async (): Promise<account[]> => {
   const token = sessionStorage.getItem('accessToken');
@@ -40,4 +42,16 @@ export const getTransactions = async (
     },
   );
   return data;
+};
+
+export const getUserInfo = async (): Promise<userInfo> => {
+  const token = sessionStorage.getItem('accessToken');
+
+  const { data } = await axios.get<userInfoResponse>(`${baseUrl}/users/me`, {
+    headers: {
+      Accept: 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return data.data;
 };

@@ -94,16 +94,18 @@ export default function TransactionList() {
       <DataGrid
         sx={{
           display: 'flex',
+          width: '100%',
           alignItems: 'center',
           justifyContent: 'space-between',
         }}
+        autoHeight
         rows={rows}
         disableColumnFilter
         disableColumnMenu
         columns={columns}
         pagination
         paginationModel={paginationModel}
-        pageSizeOptions={[10]}
+        pageSizeOptions={[5, 10, 15]}
         rowCount={paginationInfo.totalRows}
         paginationMode="server"
         onPaginationModelChange={setPaginationModel}

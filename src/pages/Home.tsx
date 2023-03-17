@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { loadAccounts, unLoadAccount } from '../redux/slices/accountSlice';
 import AccountCard from '../components/AccountCard';
 import TransactionList from '../components/TransactionList';
+import Header from '../components/Header';
 
 function Home() {
   const dispatch = useAppDispatch();
@@ -25,6 +26,7 @@ function Home() {
 
   return (
     <>
+      <Header />
       <Box
         sx={{
           width: '50%',
@@ -73,6 +75,7 @@ function Home() {
         maxWidth="md"
         sx={{
           marginTop: '1vh',
+          width: '100%',
           '@media screen and (max-width: 70em)': {
             flexDirection: 'column',
           },
