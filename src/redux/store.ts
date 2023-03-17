@@ -5,9 +5,13 @@ import {
   combineReducers,
 } from '@reduxjs/toolkit';
 import session from './slices/sessionSlice';
+import account from './slices/accountSlice';
+import transactions from './slices/transactionsSlice';
 
 const rootReducer = combineReducers({
   session,
+  account,
+  transactions,
 });
 
 const store = configureStore({
