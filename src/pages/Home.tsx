@@ -6,7 +6,6 @@ import { getAccounts } from '../api/account/AccountApi';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { loadAccounts, unLoadAccount } from '../redux/slices/accountSlice';
 import AccountCard from '../components/AccountCard';
-import MainAppBar from '../components/MainAppBar';
 import TransactionList from '../components/TransactionList';
 
 function Home() {
@@ -26,7 +25,6 @@ function Home() {
 
   return (
     <>
-      <MainAppBar />
       <Box
         sx={{
           width: '50%',
