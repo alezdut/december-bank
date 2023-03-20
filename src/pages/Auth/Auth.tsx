@@ -43,13 +43,13 @@ function Auth() {
         setLoading(true);
         const loginData = await postLogin(values);
         dispatch(startSession(loginData));
-        localStorage.clear();
-        localStorage.setItem('accessToken', loginData.token);
+        sessionStorage.clear();
+        sessionStorage.setItem('accessToken', loginData.token);
         setLoading(false);
         navigate('/home');
       } catch (e: any) {
         setLoading(false);
-        localStorage.clear();
+        sessionStorage.clear();
         dispatch(setError(e?.response?.data.errors[0]));
       }
     },
