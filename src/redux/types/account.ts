@@ -1,3 +1,5 @@
+import { currency } from '../../api/account/AccountApiResponse';
+
 export interface AccountPayload {
   user: {
     id: number;
@@ -12,7 +14,7 @@ export interface AccountPayload {
     updatedAt: string;
     currency_id: number;
     currency: {
-      name: string;
+      name: currency;
     };
   }[];
 }

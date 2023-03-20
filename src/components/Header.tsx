@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -11,22 +12,34 @@ import { loadUserInfo, unLoadUserinfo } from '../redux/slices/accountSlice';
 import { endSession } from '../redux/slices/sessionSlice';
 
 export default function Header() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.account.user);
+  const isAuthenticated = useAppSelector(
+    (state) => state.session.isAuthenticated,
+  );
+
+  const handleHomeClick = (e: any) => {
+    e.preventDefault(e);
+    navigate(`/home`);
+  };
 
   useEffect(() => {
-    (async () => {
-      try {
-        const us = await getUserInfo();
-        dispatch(loadUserInfo(us));
-      } catch (e: any) {
-        dispatch(unLoadUserinfo());
-      }
-    })();
-  }, [user]);
+    if (isAuthenticated) {
+      (async () => {
+        try {
+          const us = await getUserInfo();
+          dispatch(loadUserInfo(us));
+        } catch (e: any) {
+          dispatch(unLoadUserinfo());
+        }
+      })();
+    }
+  }, [isAuthenticated]);
 
   const clickLogoutHandler = (e: any) => {
     e.preventDefault(e);
+    localStorage.clear();
     dispatch(endSession());
   };
 
@@ -35,15 +48,26 @@ export default function Header() {
       <AppBar position="static">
         <Toolbar>
           <DecemberBankIcon />
-          <Typography variant="h5" component="div" sx={{ flexGrow: 1 }}>
+          <Typography
+            variant="h5"
+            component="div"
+            sx={{ flexGrow: 1 }}
+            onClick={handleHomeClick}
+          >
             December Bank
           </Typography>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {user.name}
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ alignSelf: 'center', justifySelf: 'center', flexGrow: 1 }}
+          >
+            {isAuthenticated && `Hola ${user.name}!`}
           </Typography>
-          <Button onClick={clickLogoutHandler} color="inherit">
-            Salir
-          </Button>
+          {isAuthenticated && (
+            <Button onClick={clickLogoutHandler} color="inherit">
+              Salir
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
     </Box>

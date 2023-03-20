@@ -1,17 +1,16 @@
 import Container from '@mui/material/Container';
-import { useEffect } from 'react';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import { useEffect, useState } from 'react';
+import { Typography, Box, CircularProgress } from '@mui/material';
 import { getAccounts } from '../api/account/AccountApi';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { loadAccounts, unLoadAccount } from '../redux/slices/accountSlice';
 import AccountCard from '../components/AccountCard';
 import TransactionList from '../components/TransactionList';
-import Header from '../components/Header';
 
 function Home() {
   const dispatch = useAppDispatch();
   const accounts = useAppSelector((state) => state.account);
+  const [loading, setLoading] = useState(false);
 
   const boxStyle = {
     width: '50%',
@@ -22,9 +21,12 @@ function Home() {
 
   const getAccountData = async () => {
     try {
+      setLoading(true);
       const acc = await getAccounts();
+      setLoading(false);
       dispatch(loadAccounts(acc));
     } catch (e: any) {
+      setLoading(false);
       dispatch(unLoadAccount());
     }
   };
@@ -34,8 +36,7 @@ function Home() {
   }, []);
 
   return (
-    <>
-      <Header />
+    <Box sx={{ width: '100vw' }}>
       <Box
         sx={{
           ...boxStyle,
@@ -60,9 +61,9 @@ function Home() {
           justifyContent: 'space-around',
         }}
       >
-        {accounts.accounts.map((a) => (
-          <AccountCard account={a} key={a.id} />
-        ))}
+        {loading && <CircularProgress />}
+        {!loading &&
+          accounts.accounts.map((a) => <AccountCard account={a} key={a.id} />)}
       </Container>
       <Box
         sx={{
@@ -86,7 +87,7 @@ function Home() {
       >
         <TransactionList />
       </Container>
-    </>
+    </Box>
   );
 }
 

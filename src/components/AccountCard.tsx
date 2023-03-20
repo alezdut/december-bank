@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -7,6 +8,8 @@ import CURRENCY_SYMBOL from '../constants/currencySymbol';
 import style from './AccountCard.module.css';
 
 function AccountCard({ account }: any) {
+  const navigate = useNavigate();
+
   const {
     id,
     balance,
@@ -16,6 +19,10 @@ function AccountCard({ account }: any) {
     balance: number;
     currency: { name: 'USD' | 'URU' | 'EU' };
   } = account;
+
+  const handleButtonClick = () => {
+    navigate(`/transfer?id=${id}&currency=${name}`);
+  };
 
   return (
     <Card
@@ -46,6 +53,7 @@ function AccountCard({ account }: any) {
       <CardActions sx={{ display: 'flex' }}>
         <Button
           size="small"
+          onClick={handleButtonClick}
           sx={{
             alignSelf: 'flex-end',
             justifySelf: 'flex-end',

@@ -1,0 +1,5 @@
+.container {display: flex; flex-direction: column; margin-top: 10vh; height: '100%'; justify-content: space-between; align-content: space-between;}
+.container .form {display: flex; flex-direction: column; justify-content: space-between; height: '100%';}
+.numericFormat {height: '150px';}
+.formControl {margin: '10px'}
+.selectContent {display: flex; flex-direction: row; justify-content: space-around; align-items: center;}

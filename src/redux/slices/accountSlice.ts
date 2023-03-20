@@ -17,7 +17,7 @@ const intialState: AccountPayload = {
       updatedAt: '',
       currency_id: 0,
       currency: {
-        name: '',
+        name: 'URU',
       },
     },
   ],

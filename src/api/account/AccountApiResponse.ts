@@ -6,9 +6,11 @@ export interface account {
   updatedAt: string;
   currency_id: number;
   currency: {
-    name: string;
+    name: currency;
   };
 }
+
+export type currency = 'USD' | 'EU' | 'URU';
 
 export interface userInfo {
   id: number;
@@ -18,16 +20,7 @@ export interface userInfo {
   updatedAt: string;
 }
 
-export interface userInfoResponse {
-  data: userInfo;
-}
-
-export interface accountResponse {
-  data: account[];
-  errors: string[];
-}
-
-export interface transactions {
+export interface transaction {
   id: number;
   description: string;
   amount: number;
@@ -48,8 +41,31 @@ export interface transactionPagination {
   totalRows: number;
 }
 
+export interface rates {
+  usd: number;
+  eu: number;
+}
+
 export interface transactionsResponse {
-  data: transactions[];
+  data: transaction[];
   pagination: transactionPagination;
+  errors: string[];
+}
+
+export interface transferResponse {
+  data: transaction;
+  errors: string[];
+}
+
+export interface ratesResponse {
+  data: rates;
+}
+
+export interface userInfoResponse {
+  data: userInfo;
+}
+
+export interface accountResponse {
+  data: account[];
   errors: string[];
 }

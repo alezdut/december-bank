@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { transactions } from '../../api/account/AccountApiResponse';
+import { transaction } from '../../api/account/AccountApiResponse';
 import { TransactionsPayload } from '../types/transactions';
 
 const intialState: TransactionsPayload = {
@@ -19,7 +19,7 @@ const transactionsSlice = createSlice({
   name: 'transactions',
   initialState: intialState,
   reducers: {
-    loadTransactions: (state, { payload }: PayloadAction<transactions[]>) => ({
+    loadTransactions: (state, { payload }: PayloadAction<transaction[]>) => ({
       ...state,
       transactions: payload,
     }),

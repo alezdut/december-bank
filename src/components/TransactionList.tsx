@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
+import { Box } from '@mui/material';
 import { getTransactions } from '../api/account/AccountApi';
 
 const columns: GridColDef[] = [
@@ -84,33 +85,35 @@ export default function TransactionList() {
   };
 
   return (
-    <div
-      style={{
-        height: 650,
-        width: '100%',
-      }}
-    >
-      <DataGrid
-        sx={{
-          display: 'flex',
+    <div style={{ width: '100%' }}>
+      <Box
+        style={{
+          height: 650,
           width: '100%',
-          alignItems: 'center',
-          justifyContent: 'space-between',
         }}
-        autoHeight
-        rows={transactions}
-        disableColumnFilter
-        disableColumnMenu
-        columns={columns}
-        pagination
-        paginationModel={paginationModel}
-        pageSizeOptions={[5, 10, 15]}
-        rowCount={paginationInfo.totalRows}
-        paginationMode="server"
-        onPaginationModelChange={setPaginationModel}
-        loading={loading}
-        onSortModelChange={handleSort}
-      />
+      >
+        <DataGrid
+          sx={{
+            display: 'flex',
+            width: '100%',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+          }}
+          autoHeight
+          rows={transactions}
+          disableColumnFilter
+          disableColumnMenu
+          columns={columns}
+          pagination
+          paginationModel={paginationModel}
+          pageSizeOptions={[5, 10, 15]}
+          rowCount={paginationInfo.totalRows}
+          paginationMode="server"
+          onPaginationModelChange={setPaginationModel}
+          loading={loading}
+          onSortModelChange={handleSort}
+        />
+      </Box>
     </div>
   );
 }
