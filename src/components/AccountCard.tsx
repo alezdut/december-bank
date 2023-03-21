@@ -4,7 +4,7 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import CURRENCY_SYMBOL from '../constants/currencySymbol';
+import { CURRENCY_SYMBOL } from '../constants/currencySymbol';
 import style from './AccountCard.module.css';
 
 function AccountCard({ account }: any) {

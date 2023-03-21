@@ -1,5 +1,3 @@
-/* eslint-disable spaced-comment */
-/* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import {
@@ -22,17 +20,13 @@ import styles from './Transfer.module.css';
 import { postTransaction } from '../../api/account/AccountApi';
 import { useAppSelector } from '../../redux/hooks';
 import getExchangeRates from '../../utils/utils';
-
-const currencyOptions = [
-  { value: 'USD', label: 'U$S (USD)' },
-  { value: 'EU', label: '€ (EU)' },
-  { value: 'URU', label: '$ (URU)' },
-];
+import { CURRENCY_OPTIONS } from '../../constants/currencySymbol';
 
 function Transfer() {
   const navigate = useNavigate();
   const accounts = useAppSelector((state) => state.account.accounts);
   const [searchParams] = useSearchParams();
+
   const [account, setAccount] = useState<number>(
     Number(searchParams.get('id')),
   );
@@ -159,7 +153,7 @@ function Transfer() {
               onChange={(e) => setCurrency(e.target.value as string)}
               required
             >
-              {currencyOptions.map((option) => (
+              {CURRENCY_OPTIONS.map((option) => (
                 <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
