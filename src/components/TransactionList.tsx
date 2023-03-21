@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
 import { Box } from '@mui/material';
 import { getTransactions } from '../api/account/AccountApi';
+import { ONE_MINUTE, PAGE_SIZE_OPTIONS } from '../constants/constants';
 
 const columns: GridColDef[] = [
   {
@@ -34,15 +35,15 @@ const columns: GridColDef[] = [
   },
 ];
 export default function TransactionList() {
-  const [paginationModel, setPaginationModel] = React.useState({
+  const [paginationModel, setPaginationModel] = useState({
     page: 0,
     pageSize: 10,
   });
-  const [sortModel, setSortModel] = React.useState({
+  const [sortModel, setSortModel] = useState({
     field: '',
     sort: '',
   });
-  const [paginationInfo, setPaginationInfo] = React.useState({
+  const [paginationInfo, setPaginationInfo] = useState({
     currentPage: 1,
     hasMorePages: true,
     pageSize: 10,
@@ -71,7 +72,7 @@ export default function TransactionList() {
 
   useEffect(() => {
     let active = true;
-    const interval = setInterval(() => getData(active), 60000);
+    const interval = setInterval(() => getData(active), ONE_MINUTE);
     getData(active);
 
     return () => {
@@ -80,8 +81,8 @@ export default function TransactionList() {
     };
   }, [paginationModel, sortModel]);
 
-  const handleSort = (e: any) => {
-    setSortModel(e[0]);
+  const handleSort = (model: any) => {
+    setSortModel(model[0]);
   };
 
   return (
@@ -106,7 +107,7 @@ export default function TransactionList() {
           columns={columns}
           pagination
           paginationModel={paginationModel}
-          pageSizeOptions={[5, 10, 15]}
+          pageSizeOptions={PAGE_SIZE_OPTIONS}
           rowCount={paginationInfo.totalRows}
           paginationMode="server"
           onPaginationModelChange={setPaginationModel}

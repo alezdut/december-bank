@@ -1,18 +1,18 @@
-export interface account {
+export interface Account {
   id: number;
   balance: number;
   owner_id: number;
   createdAt: string;
   updatedAt: string;
   currency_id: number;
-  currency: {
-    name: currency;
-  };
+  currency: Currency;
 }
 
-export type currency = 'USD' | 'EU' | 'URU';
+export type Currency = {
+  name: 'USD' | 'EU' | 'URU';
+};
 
-export interface userInfo {
+export interface UserInfo {
   id: number;
   name: string;
   email: string;
@@ -20,7 +20,7 @@ export interface userInfo {
   updatedAt: string;
 }
 
-export interface transaction {
+export interface Transaction {
   id: number;
   description: string;
   amount: number;
@@ -33,7 +33,7 @@ export interface transaction {
   to_account_id: number;
 }
 
-export interface transactionPagination {
+export interface TransactionPagination {
   currentPage: number;
   hasMorePages: boolean;
   pageSize: number;
@@ -41,31 +41,31 @@ export interface transactionPagination {
   totalRows: number;
 }
 
-export interface rates {
+export interface Rates {
   usd: number;
   eu: number;
 }
 
-export interface transactionsResponse {
-  data: transaction[];
-  pagination: transactionPagination;
+export interface TransactionsResponse {
+  data: Transaction[];
+  pagination: TransactionPagination;
   errors: string[];
 }
 
-export interface transferResponse {
-  data: transaction;
+export interface TransferResponse {
+  data: Transaction;
   errors: string[];
 }
 
-export interface ratesResponse {
-  data: rates;
+export interface RatesResponse {
+  data: Rates;
 }
 
-export interface userInfoResponse {
-  data: userInfo;
+export interface UserInfoResponse {
+  data: UserInfo;
 }
 
-export interface accountResponse {
-  data: account[];
+export interface AccountResponse {
+  data: Account[];
   errors: string[];
 }

@@ -1,4 +1,4 @@
-export interface login {
+export interface Login {
   id: number;
   name: string;
   email: string;
@@ -8,18 +8,18 @@ export interface login {
   tokenExpiration: number;
 }
 
-export interface createUser extends login {
+export interface CreateUser extends Login {
   accounts: {
     id: number;
     currency: string;
   }[];
 }
 
-export interface loginResponse {
-  data: login;
+export interface LoginResponse {
+  data: Login;
   errors: string[];
 }
 
-export interface createUserResponse {
-  data: createUser;
+export interface CreateUserResponse {
+  data: CreateUser;
 }

@@ -1,4 +1,4 @@
-export interface transferRequest {
+export interface TransferRequest {
   description: string;
   account_from: number;
   account_to: number;

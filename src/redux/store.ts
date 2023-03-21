@@ -1,18 +1,5 @@
-import {
-  Action,
-  configureStore,
-  ThunkAction,
-  combineReducers,
-} from '@reduxjs/toolkit';
-import session from './slices/sessionSlice';
-import account from './slices/accountSlice';
-import transactions from './slices/transactionsSlice';
-
-const rootReducer = combineReducers({
-  session,
-  account,
-  transactions,
-});
+import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit';
+import rootReducer from './slices/rootReducer';
 
 const store = configureStore({
   reducer: rootReducer,

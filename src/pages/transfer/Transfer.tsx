@@ -20,7 +20,7 @@ import styles from './Transfer.module.css';
 import { postTransaction } from '../../api/account/AccountApi';
 import { useAppSelector } from '../../redux/hooks';
 import getExchangeRates from '../../utils/utils';
-import { CURRENCY_OPTIONS } from '../../constants/currencySymbol';
+import { CURRENCY_OPTIONS } from '../../constants/currency';
 
 function Transfer() {
   const navigate = useNavigate();

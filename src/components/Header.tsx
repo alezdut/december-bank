@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import DecemberBankIcon from '@mui/icons-material/Paid';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getUserInfo } from '../api/account/AccountApi';
-import { loadUserInfo, unLoadUserinfo } from '../redux/slices/accountSlice';
+import { loadUserInfo, unloadUserinfo } from '../redux/slices/accountSlice';
 import { endSession } from '../redux/slices/sessionSlice';
 
 export default function Header() {
@@ -31,7 +31,7 @@ export default function Header() {
           const us = await getUserInfo();
           dispatch(loadUserInfo(us));
         } catch (e: any) {
-          dispatch(unLoadUserinfo());
+          dispatch(unloadUserinfo());
         }
       })();
     }

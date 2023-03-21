@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { account, userInfo } from '../../api/account/AccountApiResponse';
+import { Account, UserInfo } from '../../api/account/AccountApiResponse';
 import { AccountPayload } from '../types/account';
 
-const intialState: AccountPayload = {
+const initialState: AccountPayload = {
   user: {
     id: 0,
     name: '',
@@ -25,17 +25,17 @@ const intialState: AccountPayload = {
 
 const sessionSlice = createSlice({
   name: 'session',
-  initialState: intialState,
+  initialState,
   reducers: {
-    loadAccounts: (state, { payload }: PayloadAction<account[]>) => ({
+    loadAccounts: (state, { payload }: PayloadAction<Account[]>) => ({
       ...state,
       accounts: payload,
     }),
-    unLoadAccount: (state) => ({
+    unloadAccount: (state) => ({
       ...state,
-      accounts: intialState.accounts,
+      accounts: initialState.accounts,
     }),
-    loadUserInfo: (state, { payload }: PayloadAction<userInfo>) => ({
+    loadUserInfo: (state, { payload }: PayloadAction<UserInfo>) => ({
       ...state,
       user: {
         id: payload.id,
@@ -43,14 +43,14 @@ const sessionSlice = createSlice({
         email: payload.email,
       },
     }),
-    unLoadUserinfo: (state) => ({
+    unloadUserinfo: (state) => ({
       ...state,
-      user: intialState.user,
+      user: initialState.user,
     }),
   },
 });
 
-export const { loadAccounts, unLoadAccount, loadUserInfo, unLoadUserinfo } =
+export const { loadAccounts, unloadAccount, loadUserInfo, unloadUserinfo } =
   sessionSlice.actions;
 
 export { sessionSlice };

@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { transaction } from '../../api/account/AccountApiResponse';
+import { Transaction } from '../../api/account/AccountApiResponse';
 import { TransactionsPayload } from '../types/transactions';
 
-const intialState: TransactionsPayload = {
+const initialState: TransactionsPayload = {
   transactions: [
     {
       id: 0,
@@ -11,25 +11,29 @@ const intialState: TransactionsPayload = {
       currency_name: '',
       amount: 0,
       createdAt: '',
+      description: '',
+      amount_from: 0,
+      amount_to: 0,
+      updatedAt: '',
     },
   ],
 };
 
 const transactionsSlice = createSlice({
   name: 'transactions',
-  initialState: intialState,
+  initialState,
   reducers: {
-    loadTransactions: (state, { payload }: PayloadAction<transaction[]>) => ({
+    loadTransactions: (state, { payload }: PayloadAction<Transaction[]>) => ({
       ...state,
       transactions: payload,
     }),
-    unLoadTransactions: () => ({
-      ...intialState,
+    unloadTransactions: () => ({
+      ...initialState,
     }),
   },
 });
 
-export const { loadTransactions, unLoadTransactions } =
+export const { loadTransactions, unloadTransactions } =
   transactionsSlice.actions;
 
 export { transactionsSlice };

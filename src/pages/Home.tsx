@@ -3,13 +3,13 @@ import { useEffect, useState } from 'react';
 import { Typography, Box, CircularProgress } from '@mui/material';
 import { getAccounts } from '../api/account/AccountApi';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { loadAccounts, unLoadAccount } from '../redux/slices/accountSlice';
+import { loadAccounts, unloadAccount } from '../redux/slices/accountSlice';
 import AccountCard from '../components/AccountCard';
 import TransactionList from '../components/TransactionList';
 
 function Home() {
   const dispatch = useAppDispatch();
-  const accounts = useAppSelector((state) => state.account);
+  const accountState = useAppSelector((state) => state.account);
   const [loading, setLoading] = useState(false);
 
   const boxStyle = {
@@ -27,7 +27,7 @@ function Home() {
       dispatch(loadAccounts(acc));
     } catch (e: any) {
       setLoading(false);
-      dispatch(unLoadAccount());
+      dispatch(unloadAccount());
     }
   };
 
@@ -63,7 +63,9 @@ function Home() {
       >
         {loading && <CircularProgress />}
         {!loading &&
-          accounts.accounts.map((a) => <AccountCard account={a} key={a.id} />)}
+          accountState.accounts.map((account) => (
+            <AccountCard account={account} key={account.id} />
+          ))}
       </Container>
       <Box
         sx={{

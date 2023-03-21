@@ -1,57 +1,57 @@
-import axios from 'axios';
-import { transferRequest } from './AccountApiRequest';
+import axiosInstance from '../common/axiosInstance';
+import { TransferRequest } from './AccountApiRequest';
 import {
-  account,
-  accountResponse,
-  rates,
-  ratesResponse,
-  transactionsResponse,
-  transferResponse,
-  userInfo,
-  userInfoResponse,
+  Account,
+  AccountResponse,
+  Rates,
+  RatesResponse,
+  TransactionsResponse,
+  TransferResponse,
+  UserInfo,
+  UserInfoResponse,
 } from './AccountApiResponse';
 
-const baseUrl = process.env.REACT_APP_BASE_URL;
-
-export const getAccounts = async (): Promise<account[]> => {
+export const getAccounts = async (): Promise<Account[]> => {
   const token = sessionStorage.getItem('accessToken');
-  const { data } = await axios.get<accountResponse>(`${baseUrl}/accounts`, {
+  const { data } = await axiosInstance.get<AccountResponse>(`/accounts`, {
     headers: {
-      Accept: 'application/json',
       Authorization: `Bearer ${token}`,
     },
   });
   return data.data;
 };
 
+interface paramsType {
+  page: number;
+  pageSize: number;
+  field: string;
+  sort: string;
+}
+
 export const getTransactions = async (
-  params?: any,
-): Promise<transactionsResponse> => {
+  queryParams: paramsType,
+): Promise<TransactionsResponse> => {
   const token = sessionStorage.getItem('accessToken');
-  const { page, pageSize, field, sort } = params;
-  const { data } = await axios.get<transactionsResponse>(
-    `${baseUrl}/transactions`,
+  const { page, pageSize, field, sort } = queryParams;
+
+  const params = { page, page_size: pageSize, sort_by: field, order_by: sort };
+
+  const { data } = await axiosInstance.get<TransactionsResponse>(
+    `/transactions`,
     {
       headers: {
-        Accept: 'application/json',
         Authorization: `Bearer ${token}`,
       },
-      params: {
-        page,
-        page_size: pageSize,
-        sort_by: field,
-        order_by: sort,
-      },
+      params,
     },
   );
   return data;
 };
 
-export const getUserInfo = async (): Promise<userInfo> => {
+export const getUserInfo = async (): Promise<UserInfo> => {
   const token = sessionStorage.getItem('accessToken');
-  const { data } = await axios.get<userInfoResponse>(`${baseUrl}/users/me`, {
+  const { data } = await axiosInstance.get<UserInfoResponse>(`/users/me`, {
     headers: {
-      Accept: 'application/json',
       Authorization: `Bearer ${token}`,
     },
   });
@@ -59,15 +59,14 @@ export const getUserInfo = async (): Promise<userInfo> => {
 };
 
 export const postTransaction = async (
-  request: transferRequest,
-): Promise<transferResponse> => {
+  request: TransferRequest,
+): Promise<TransferResponse> => {
   const token = sessionStorage.getItem('accessToken');
-  const { data } = await axios.post<transferResponse>(
-    `${baseUrl}/transactions`,
+  const { data } = await axiosInstance.post<TransferResponse>(
+    `/transactions`,
     request,
     {
       headers: {
-        Accept: 'application/json',
         Authorization: `Bearer ${token}`,
       },
     },
@@ -75,13 +74,12 @@ export const postTransaction = async (
   return data;
 };
 
-export const getRates = async (): Promise<rates> => {
+export const getRates = async (): Promise<Rates> => {
   const token = sessionStorage.getItem('accessToken');
-  const { data } = await axios.get<ratesResponse>(
-    `${baseUrl}/transactions/rates`,
+  const { data } = await axiosInstance.get<RatesResponse>(
+    `/transactions/rates`,
     {
       headers: {
-        Accept: 'application/json',
         Authorization: `Bearer ${token}`,
       },
     },
