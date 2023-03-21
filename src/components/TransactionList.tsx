@@ -63,7 +63,7 @@ export default function TransactionList() {
 
     if (active) {
       setPaginationInfo(pagination);
-      if (data !== transactions) {
+      if (JSON.stringify(data) !== JSON.stringify(transactions)) {
         setTransactions(data);
       }
       setLoading(false);
