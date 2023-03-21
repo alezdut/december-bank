@@ -31,8 +31,8 @@ function Transfer() {
     Number(searchParams.get('id')),
   );
   const [currency, setCurrency] = useState(searchParams.get('currency' || ''));
-  const [amount, setAmount] = useState<number>(0);
-  const [destination, setDestination] = useState<number>(0);
+  const [amount, setAmount] = useState<number>();
+  const [destination, setDestination] = useState<number>();
   const [reference, setReference] = useState('');
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [error, setError] = useState('');
@@ -41,8 +41,8 @@ function Transfer() {
   const [originAmount, setOriginAmount] = useState(0);
   const [originCurrency, setOriginCurrency] = useState('');
 
-  const handleConfirm = async (e: any) => {
-    e.preventDefault(e);
+  const handleConfirm = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     const currentAccount = accounts.filter((a) => a.id === account && a);
     if (currentAccount[0].currency.name !== currency) {
       setLoading(true);
@@ -170,7 +170,9 @@ function Transfer() {
           label="Importe"
           type="number"
           value={amount}
-          onChange={(e) => setAmount(Number(e.target.value))}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setAmount(Number(e.target.value))
+          }
           required
         />
         <TextField
@@ -181,7 +183,9 @@ function Transfer() {
           label="Cuenta destino"
           type="number"
           value={destination}
-          onChange={(e) => setDestination(Number(e.target.value))}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setDestination(Number(e.target.value))
+          }
           required
         />
 
@@ -192,7 +196,9 @@ function Transfer() {
           id="reference"
           label="Referencia"
           value={reference}
-          onChange={(e) => setReference(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setReference(e.target.value)
+          }
           inputProps={{ maxLength: 128 }}
         />
 
