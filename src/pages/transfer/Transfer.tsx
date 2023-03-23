@@ -1,5 +1,6 @@
+/* eslint-disable no-nested-ternary */
 import React, { useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import {
   FormControl,
   InputLabel,
@@ -15,56 +16,63 @@ import {
   Container,
   Box,
   CircularProgress,
+  InputAdornment,
+  SelectChangeEvent,
 } from '@mui/material';
 import styles from './Transfer.module.css';
 import { postTransaction } from '../../api/account/AccountApi';
 import { useAppSelector } from '../../redux/hooks';
 import getExchangeRates from '../../utils/utils';
 import { CURRENCY_OPTIONS } from '../../constants/currency';
+import Receipt from '../receipt/Receipt';
+import { Transaction } from '../../api/account/AccountApiResponse';
 
 function Transfer() {
-  const navigate = useNavigate();
   const accounts = useAppSelector((state) => state.account.accounts);
   const [searchParams] = useSearchParams();
 
   const [account, setAccount] = useState<number>(
     Number(searchParams.get('id')),
   );
-  const [currency, setCurrency] = useState(searchParams.get('currency' || ''));
+  const [currency, setCurrency] = useState<string>(
+    searchParams.get('currency') || '',
+  );
   const [amount, setAmount] = useState<number>();
   const [destination, setDestination] = useState<number>();
   const [reference, setReference] = useState('');
-  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
   const [error, setError] = useState('');
-  const [errorOpen, setErrorOpen] = useState(false);
+  const [errorModalOpen, setErrorModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [originAmount, setOriginAmount] = useState(0);
   const [originCurrency, setOriginCurrency] = useState('');
+  const [modalReceiptOpen, setModalReceiptOpen] = useState(false);
+  const [receipt, setReceipt] = useState<Transaction>();
 
   const handleConfirm = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const currentAccount = accounts.filter((a) => a.id === account && a);
-    if (currentAccount[0].currency.name !== currency) {
+    const currentAccount = accounts.filter((a) => a.id === account);
+    if (currentAccount[0]?.currency?.name !== currency) {
       setLoading(true);
       setOriginCurrency(currentAccount[0].currency.name);
-      const origAmount = await getExchangeRates(
+      const originalAmount = await getExchangeRates(
         currentAccount[0].currency.name,
         currency!,
         amount!,
       );
-      setOriginAmount(origAmount!);
+      setOriginAmount(originalAmount!);
       setLoading(false);
-      setConfirmOpen(true);
+      setConfirmationModalOpen(true);
       return;
     }
     setOriginAmount(0);
-    setConfirmOpen(true);
+    setConfirmationModalOpen(true);
   };
 
   const handleFormSubmit = async (e: any) => {
     e.preventDefault();
     try {
-      setConfirmOpen(false);
+      setConfirmationModalOpen(false);
       setLoading(true);
       const { data } = await postTransaction({
         description: reference,
@@ -76,18 +84,15 @@ function Transfer() {
 
       if (data) {
         setLoading(false);
-        navigate(
-          `/receipt?id=${data.id}&amount=${data.amount}&amount_from=${data.amount_from}&amount_to=${data.amount_to}
-          &createdAt=${data.createdAt}&currency_name=${data.currency_name}&description=${data.description}
-          &from_account_id=${data.from_account_id}&to_account_id=${data.to_account_id}`,
-        );
-        setConfirmOpen(false);
+        setReceipt(data);
+        setConfirmationModalOpen(false);
+        setModalReceiptOpen(true);
       }
     } catch (err: any) {
-      setConfirmOpen(false);
+      setConfirmationModalOpen(false);
       setLoading(false);
       setError(err.response.data.errors[0]);
-      setErrorOpen(true);
+      setErrorModalOpen(true);
     }
   };
 
@@ -127,13 +132,15 @@ function Transfer() {
             <Select
               labelId="account-label"
               id="account"
-              value={account}
-              onChange={(e) => setAccount(e.target.value as number)}
+              value={String(account)}
+              onChange={(event: SelectChangeEvent) =>
+                setAccount(Number(event.target.value))
+              }
               required
             >
-              {accounts.map((acc) => (
-                <MenuItem key={acc.id} value={acc.id}>
-                  {acc.id}
+              {accounts.map((userAccount) => (
+                <MenuItem key={userAccount.id} value={userAccount.id}>
+                  {`${userAccount.id} - (${userAccount.currency.name})`}
                 </MenuItem>
               ))}
             </Select>
@@ -161,8 +168,14 @@ function Transfer() {
             </Select>
           </FormControl>
         </Box>
-
         <TextField
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                {currency === 'URU' ? '$' : currency === 'USD' ? 'US$' : '€'}
+              </InputAdornment>
+            ),
+          }}
           sx={{
             marginBottom: '1vh',
           }}
@@ -206,7 +219,7 @@ function Transfer() {
           Confirmar transferencia
         </Button>
 
-        <Dialog open={confirmOpen}>
+        <Dialog open={confirmationModalOpen}>
           <DialogTitle>Confirmar Transferencia</DialogTitle>
           <DialogContent>
             <DialogContentText>
@@ -217,15 +230,19 @@ function Transfer() {
               {reference && `Referencia: ${reference}`}
             </DialogContentText>
             <DialogContentText>
-              {originAmount !== 0 &&
+              {originAmount > 0 &&
                 `Se debitaran ${originCurrency}${originAmount.toFixed(
                   2,
                 )} de la cuenta de origen`}
             </DialogContentText>
+            <DialogContentText>
+              {originAmount === -1 &&
+                `Ocurrio un error al obtener la cotizacion actualizada`}
+            </DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button
-              onClick={() => setConfirmOpen(false)}
+              onClick={() => setConfirmationModalOpen(false)}
               color="secondary"
               autoFocus
             >
@@ -236,20 +253,33 @@ function Transfer() {
             </Button>
           </DialogActions>
         </Dialog>
-        <Dialog open={errorOpen} color="error">
+        <Dialog open={errorModalOpen} color="error">
           <DialogTitle>Error al realizar la transferencia</DialogTitle>
           <DialogContent>
             <DialogContentText>{error}</DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button
-              onClick={() => setErrorOpen(false)}
+              onClick={() => setErrorModalOpen(false)}
               color="secondary"
               autoFocus
             >
               Cerrar
             </Button>
           </DialogActions>
+        </Dialog>
+        <Dialog
+          open={modalReceiptOpen}
+          color="primary"
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <DialogContent>
+            <Receipt receipt={receipt!} />
+          </DialogContent>
         </Dialog>
       </form>
     </Container>

@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { Navigate } from 'react-router-dom';
+import { ROUTES } from '../constants/constants';
 import { useAppSelector } from '../redux/hooks';
 
 interface PropType {
@@ -13,7 +14,7 @@ const PrivateRoute: FC<PropType> = ({ component: Component }) => {
   );
 
   if (isAuthenticated) return <Component />;
-  return <Navigate to="/login" />;
+  return <Navigate to={`${ROUTES.LOGIN}`} />;
 };
 
 export default PrivateRoute;

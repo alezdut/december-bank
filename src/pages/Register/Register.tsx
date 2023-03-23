@@ -13,6 +13,7 @@ import styles from './Register.module.css';
 import { postCreateUser } from '../../api/session/SessionApi';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { setError, startSession } from '../../redux/slices/sessionSlice';
+import { ROUTES } from '../../constants/constants';
 
 function Auth() {
   const dispatch = useAppDispatch();
@@ -56,7 +57,7 @@ function Auth() {
         sessionStorage.clear();
         sessionStorage.setItem('accessToken', loginData.token);
         setLoading(false);
-        navigate('/home');
+        navigate(ROUTES.HOME);
       } catch (e: any) {
         setLoading(false);
         sessionStorage.clear();

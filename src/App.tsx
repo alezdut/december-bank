@@ -6,19 +6,18 @@ import Home from './pages/Home';
 import Root from './pages/Root';
 import PrivateRoute from './components/ProtectedRoute';
 import Transfer from './pages/transfer/Transfer';
-import Receipt from './pages/receipt/Receipt';
+import { ROUTES } from './constants/constants';
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: ROUTES.ROOT,
     element: <Root />,
     errorElement: <PrivateRoute component={Home} />,
     children: [
-      { path: '/home', element: <PrivateRoute component={Home} /> },
-      { path: '/transfer', element: <PrivateRoute component={Transfer} /> },
-      { path: '/receipt', element: <PrivateRoute component={Receipt} /> },
-      { path: '/login', element: <Auth /> },
-      { path: '/register', element: <Register /> },
+      { path: ROUTES.HOME, element: <PrivateRoute component={Home} /> },
+      { path: ROUTES.TRANSFER, element: <PrivateRoute component={Transfer} /> },
+      { path: ROUTES.LOGIN, element: <Auth /> },
+      { path: ROUTES.REGISTER, element: <Register /> },
     ],
   },
 ]);

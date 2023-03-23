@@ -1,29 +1,34 @@
 /* eslint-disable camelcase */
 import Box from '@mui/material/Box';
 import { Typography, Button, Container } from '@mui/material';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { Transaction } from '../../api/account/AccountApiResponse';
+import { ROUTES } from '../../constants/constants';
 
-export default function Receipt() {
+interface CustomProps {
+  receipt: Transaction;
+}
+
+export default function Receipt({ receipt }: CustomProps) {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
 
-  const id = searchParams.get('id');
-  const description = searchParams.get('description');
-  const amount = searchParams.get('amount');
-  const amountFrom = searchParams.get('amount_from');
-  const amountTo = searchParams.get('amount_to');
-  const currencyName = searchParams.get('currency_name');
-  const createdAt = searchParams.get('createdAt');
-  const fromAccountId = searchParams.get('from_account_id');
-  const toAccountId = searchParams.get('to_account_id');
+  const {
+    id,
+    description,
+    amount,
+    amount_from,
+    amount_to,
+    currency_name,
+    createdAt,
+    from_account_id,
+    to_account_id,
+  } = receipt;
+  const date = new Date(createdAt);
 
   return (
-    <Container sx={{ maxWidth: 'sm', alignSelf: 'center', display: 'flex' }}>
+    <Container sx={{ alignSelf: 'center' }}>
       <Box
         sx={{
-          width: '90%',
-          maxWidth: 500,
-          margin: '10vh',
           padding: '20px',
           border: 'solid 2px black',
         }}
@@ -35,35 +40,35 @@ export default function Receipt() {
           {`ID de transferencia: ${id}`}
         </Typography>
         <Typography variant="h6" gutterBottom>
-          {`Moneda: ${currencyName}`}
+          {`Moneda: ${currency_name}`}
         </Typography>
         <Typography variant="h6" gutterBottom>
           {`Monto: $${Number(amount).toFixed(2)}`}
         </Typography>
         <Typography variant="h6" gutterBottom>
-          {`De cuenta numero: ${fromAccountId}`}
+          {`De cuenta numero: ${from_account_id}`}
         </Typography>
         <Typography variant="h6" gutterBottom>
-          {`A la cuenta numero: ${toAccountId}`}
+          {`A la cuenta numero: ${to_account_id}`}
         </Typography>
         <Typography variant="h6" gutterBottom>
-          {`Monto en moneda de origen: $${Number(amountFrom).toFixed(2)}`}
+          {`Monto en moneda de origen: $${Number(amount_from).toFixed(2)}`}
         </Typography>
         <Typography variant="h6" gutterBottom>
-          {`Monto en moneda de destino: $${Number(amountTo).toFixed(2)}`}
+          {`Monto en moneda de destino: $${Number(amount_to).toFixed(2)}`}
         </Typography>
         <Typography variant="h6" gutterBottom>
           {`Referencia: ${description || 'Sin referencia'}`}
         </Typography>
         <Typography variant="h6" gutterBottom>
-          {`Fecha: ${createdAt?.split('T')[0]}`}
+          {`Fecha: ${date.toLocaleDateString()}`}
         </Typography>
         <Button
           color="primary"
           variant="contained"
           fullWidth
           type="submit"
-          onClick={() => navigate('/home')}
+          onClick={() => navigate(`${ROUTES.HOME}`)}
         >
           Aceptar
         </Button>

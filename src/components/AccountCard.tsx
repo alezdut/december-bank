@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import { CURRENCY_SYMBOLS } from '../constants/currency';
 import style from './AccountCard.module.css';
 import { Account } from '../api/account/AccountApiResponse';
+import { ROUTES } from '../constants/constants';
 
 interface AccountCardProps {
   account: Account;
@@ -15,14 +16,14 @@ interface AccountCardProps {
 function AccountCard({ account }: AccountCardProps) {
   const navigate = useNavigate();
   const {
-    id,
+    id: accountId,
     balance,
-    currency: { name },
+    currency: { name: currencyName },
   } = account;
-  const symbol = CURRENCY_SYMBOLS[name];
+  const symbol = CURRENCY_SYMBOLS[currencyName];
 
   const handleButtonClick = () => {
-    navigate(`/transfer?id=${id}&currency=${name}`);
+    navigate(`${ROUTES.TRANSFER}?id=${accountId}&currency=${currencyName}`);
   };
 
   return (
@@ -32,7 +33,7 @@ function AccountCard({ account }: AccountCardProps) {
         minWidth: '320px',
         margin: '1vw',
       }}
-      key={id}
+      key={accountId}
     >
       <CardContent>
         <Typography
@@ -42,13 +43,13 @@ function AccountCard({ account }: AccountCardProps) {
           color="text.secondary"
           gutterBottom
         >
-          {id}
+          {accountId}
         </Typography>
         <Typography variant="h5" component="div">
           {`${symbol} ${balance.toFixed(2)}`}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {name}
+          {currencyName}
         </Typography>
       </CardContent>
       <CardActions sx={{ display: 'flex' }}>

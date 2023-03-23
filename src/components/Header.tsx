@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getUserInfo } from '../api/account/AccountApi';
 import { loadUserInfo, unloadUserinfo } from '../redux/slices/accountSlice';
 import { endSession } from '../redux/slices/sessionSlice';
+import { ROUTES } from '../constants/constants';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -20,8 +21,8 @@ export default function Header() {
   );
 
   const handleHomeClick = (e: any) => {
-    e.preventDefault(e);
-    navigate(`/home`);
+    e.preventDefault();
+    navigate(`${ROUTES.HOME}`);
   };
 
   useEffect(() => {
@@ -38,7 +39,7 @@ export default function Header() {
   }, [isAuthenticated]);
 
   const clickLogoutHandler = (e: any) => {
-    e.preventDefault(e);
+    e.preventDefault();
     localStorage.clear();
     dispatch(endSession());
   };

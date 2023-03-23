@@ -8,19 +8,22 @@ export default async function getExchangeRates(
   destinyCurrency: string,
   amount: number,
 ) {
-  const rates = await getRates();
-  if (rates) {
-    if (originCurrency === 'URU') {
-      if (destinyCurrency === 'USD') return amount * rates.usd;
-      if (destinyCurrency === 'EU') return amount * rates.eu;
-    }
-    if (originCurrency === 'EU') {
-      if (destinyCurrency === 'URU') return amount / rates.eu;
-      if (destinyCurrency === 'USD') return (amount / rates.eu) * rates.usd;
-    }
-    if (originCurrency === 'USD') {
-      if (destinyCurrency === 'URU') return amount / rates.usd;
-      if (destinyCurrency === 'EU') return (amount / rates.usd) * rates.eu;
-    }
+  try {
+    const rates = await getRates();
+    const conversor = {
+      URU: () =>
+        destinyCurrency === 'USD' ? amount * rates.usd : amount * rates.eu,
+      EU: () =>
+        destinyCurrency === 'URU'
+          ? amount / rates.eu
+          : (amount / rates.eu) * rates.usd,
+      USD: () =>
+        destinyCurrency === 'URU'
+          ? amount / rates.usd
+          : (amount / rates.usd) * rates.eu,
+    };
+    if (rates) return conversor[originCurrency];
+  } catch (error) {
+    return -1;
   }
 }
