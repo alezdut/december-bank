@@ -1,43 +1,62 @@
-import axios from 'axios';
+import axiosInstance from '../common/axiosInstance';
+import { TransferRequest } from './AccountApiRequest';
 import {
-  account,
-  accountResponse,
-  transactionsResponse,
+  Account,
+  AccountResponse,
+  Rates,
+  RatesResponse,
+  TransactionsResponse,
+  TransferResponse,
+  UserInfo,
+  UserInfoResponse,
 } from './AccountApiResponse';
 
-const baseUrl = process.env.REACT_APP_BASE_URL;
-
-export const getAccounts = async (): Promise<account[]> => {
-  const token = sessionStorage.getItem('accessToken');
-
-  const { data } = await axios.get<accountResponse>(`${baseUrl}/accounts`, {
-    headers: {
-      Accept: 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const getAccounts = async (): Promise<Account[]> => {
+  const { data } = await axiosInstance.get<AccountResponse>(`/accounts`);
   return data.data;
 };
 
+interface ParamsType {
+  page: number;
+  pageSize: number;
+  field: string;
+  sort: string;
+}
+
 export const getTransactions = async (
-  params?: any,
-): Promise<transactionsResponse> => {
-  const token = sessionStorage.getItem('accessToken');
-  const { page, pageSize, field, sort } = params;
-  const { data } = await axios.get<transactionsResponse>(
-    `${baseUrl}/transactions`,
+  queryParams: ParamsType,
+): Promise<TransactionsResponse> => {
+  const { page, pageSize, field, sort } = queryParams;
+
+  const params = { page, page_size: pageSize, sort_by: field, order_by: sort };
+
+  const { data } = await axiosInstance.get<TransactionsResponse>(
+    `/transactions`,
     {
-      headers: {
-        Accept: 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      params: {
-        page,
-        page_size: pageSize,
-        sort_by: field,
-        order_by: sort,
-      },
+      params,
     },
   );
   return data;
+};
+
+export const getUserInfo = async (): Promise<UserInfo> => {
+  const { data } = await axiosInstance.get<UserInfoResponse>(`/users/me`);
+  return data.data;
+};
+
+export const postTransaction = async (
+  request: TransferRequest,
+): Promise<TransferResponse> => {
+  const { data } = await axiosInstance.post<TransferResponse>(
+    `/transactions`,
+    request,
+  );
+  return data;
+};
+
+export const getRates = async (): Promise<Rates> => {
+  const { data } = await axiosInstance.get<RatesResponse>(
+    `/transactions/rates`,
+  );
+  return data.data;
 };

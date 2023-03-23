@@ -1,17 +1,24 @@
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+import {
+  Box,
+  CircularProgress,
+  Button,
+  TextField,
+  Container,
+} from '@mui/material';
 import styles from './Auth.module.css';
 import { postLogin } from '../../api/session/SessionApi';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { setError, startSession } from '../../redux/slices/sessionSlice';
+import { ROUTES } from '../../constants/constants';
 
 function Auth() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const error = useAppSelector((state) => state.session.error);
 
@@ -34,62 +41,89 @@ function Auth() {
     validationSchema,
     onSubmit: async (values) => {
       try {
+        setLoading(true);
         const loginData = await postLogin(values);
         dispatch(startSession(loginData));
+        sessionStorage.clear();
         sessionStorage.setItem('accessToken', loginData.token);
-        navigate('/home');
+        setLoading(false);
+        navigate(`${ROUTES.HOME}`);
       } catch (e: any) {
+        setLoading(false);
+        sessionStorage.clear();
         dispatch(setError(e?.response?.data.errors[0]));
       }
     },
   });
 
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          alignSelf: 'center',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '70vh',
+          width: '100%',
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        height: '50vh',
-      }}
+    <Container
+      sx={{ maxWidth: '50vw', display: 'flex', justifyContent: 'center' }}
     >
-      <h1 className={styles.h1}>Sign In</h1>
-      <form onSubmit={formik.handleSubmit} className={styles.form}>
-        <TextField
-          fullWidth
-          id="email"
-          name="email"
-          label="Email"
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          error={formik.touched.email && Boolean(formik.errors.email)}
-          helperText={formik.touched.email && formik.errors.email}
-        />
-        <TextField
-          fullWidth
-          id="password"
-          name="password"
-          label="Password"
-          type="password"
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          error={formik.touched.password && Boolean(formik.errors.password)}
-          helperText={formik.touched.password && formik.errors.password}
-        />
-        {error && (
-          <div className={styles.errorMessage}>
-            <p>{error}</p>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+          height: '50vh',
+          minWidth: '500px',
+        }}
+      >
+        <h1 className={styles.h1}>Sign In</h1>
+        <form onSubmit={formik.handleSubmit} className={styles.form}>
+          <TextField
+            fullWidth
+            id="email"
+            name="email"
+            label="Email"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            error={formik.touched.email && Boolean(formik.errors.email)}
+            helperText={formik.touched.email && formik.errors.email}
+          />
+          <TextField
+            fullWidth
+            id="password"
+            name="password"
+            label="Password"
+            type="password"
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            error={formik.touched.password && Boolean(formik.errors.password)}
+            helperText={formik.touched.password && formik.errors.password}
+          />
+          {error && (
+            <div className={styles.errorMessage}>
+              <p>{error}</p>
+            </div>
+          )}
+          <Button color="primary" variant="contained" fullWidth type="submit">
+            Login
+          </Button>
+          <div className={styles.registerMessage}>
+            <p>No estas registrado? </p>
+            <Link to="/register"> Registrate</Link>
           </div>
-        )}
-        <Button color="primary" variant="contained" fullWidth type="submit">
-          Login
-        </Button>
-        <div className={styles.registerMessage}>
-          <p>No estas registrado? </p>
-          <Link to="/register"> Registrate</Link>
-        </div>
-      </form>
-    </Box>
+        </form>
+      </Box>
+    </Container>
   );
 }
 

@@ -1,33 +1,23 @@
-import axios from 'axios';
-import { loginResponse, createUserResponse, login } from './SessionApiResponse';
-import { createUserRequest, loginRequest } from './SessionApiRequest';
+import axiosInstance from '../common/axiosInstance';
+import { LoginResponse, CreateUserResponse, Login } from './SessionApiResponse';
+import { CreateUserRequest, LoginRequest } from './SessionApiRequest';
 
 const baseUrl = process.env.REACT_APP_BASE_URL;
 
-export const postLogin = async (request: loginRequest): Promise<login> => {
-  const { data } = await axios.post<loginResponse>(
-    `${baseUrl}/users/login`,
+export const postLogin = async (request: LoginRequest): Promise<Login> => {
+  const { data } = await axiosInstance.post<LoginResponse>(
+    `/users/login`,
     request,
-    {
-      headers: {
-        Accept: 'application/json',
-      },
-    },
   );
   return data.data;
 };
 
 export const postCreateUser = async (
-  request: createUserRequest,
-): Promise<login> => {
-  const { data } = await axios.post<createUserResponse>(
+  request: CreateUserRequest,
+): Promise<Login> => {
+  const { data } = await axiosInstance.post<CreateUserResponse>(
     `${baseUrl}/users`,
     request,
-    {
-      headers: {
-        Accept: 'application/json',
-      },
-    },
   );
   return data.data;
 };

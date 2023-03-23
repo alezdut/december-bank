@@ -1,16 +1,16 @@
 import Container from '@mui/material/Container';
-import { useEffect } from 'react';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import { useEffect, useState } from 'react';
+import { Typography, Box, CircularProgress } from '@mui/material';
 import { getAccounts } from '../api/account/AccountApi';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { loadAccounts, unLoadAccount } from '../redux/slices/accountSlice';
+import { loadAccounts, unloadAccount } from '../redux/slices/accountSlice';
 import AccountCard from '../components/AccountCard';
 import TransactionList from '../components/TransactionList';
 
 function Home() {
   const dispatch = useAppDispatch();
-  const accounts = useAppSelector((state) => state.account);
+  const accountState = useAppSelector((state) => state.account);
+  const [loading, setLoading] = useState(false);
 
   const boxStyle = {
     width: '50%',
@@ -21,10 +21,13 @@ function Home() {
 
   const getAccountData = async () => {
     try {
+      setLoading(true);
       const acc = await getAccounts();
+      setLoading(false);
       dispatch(loadAccounts(acc));
     } catch (e: any) {
-      dispatch(unLoadAccount());
+      setLoading(false);
+      dispatch(unloadAccount());
     }
   };
 
@@ -33,7 +36,7 @@ function Home() {
   }, []);
 
   return (
-    <>
+    <Box sx={{ width: '100vw' }}>
       <Box
         sx={{
           ...boxStyle,
@@ -58,9 +61,11 @@ function Home() {
           justifyContent: 'space-around',
         }}
       >
-        {accounts.accounts.map((a) => (
-          <AccountCard account={a} key={a.id} />
-        ))}
+        {loading && <CircularProgress />}
+        {!loading &&
+          accountState.accounts.map((account) => (
+            <AccountCard account={account} key={account.id} />
+          ))}
       </Container>
       <Box
         sx={{
@@ -76,6 +81,7 @@ function Home() {
         maxWidth="md"
         sx={{
           marginTop: '1vh',
+          width: '100%',
           '@media screen and (max-width: 70em)': {
             flexDirection: 'column',
           },
@@ -83,7 +89,7 @@ function Home() {
       >
         <TransactionList />
       </Container>
-    </>
+    </Box>
   );
 }
 

@@ -1,21 +1,30 @@
+import { useNavigate } from 'react-router-dom';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import CURRENCY_SYMBOL from '../constants/currencySymbol';
+import { CURRENCY_SYMBOLS } from '../constants/currency';
 import style from './AccountCard.module.css';
+import { Account } from '../api/account/AccountApiResponse';
+import { ROUTES } from '../constants/constants';
 
-function AccountCard({ account }: any) {
+interface AccountCardProps {
+  account: Account;
+}
+
+function AccountCard({ account }: AccountCardProps) {
+  const navigate = useNavigate();
   const {
-    id,
+    id: accountId,
     balance,
-    currency: { name },
-  }: {
-    id: number;
-    balance: number;
-    currency: { name: 'USD' | 'URU' | 'EU' };
+    currency: { name: currencyName },
   } = account;
+  const symbol = CURRENCY_SYMBOLS[currencyName];
+
+  const handleButtonClick = () => {
+    navigate(`${ROUTES.TRANSFER}?id=${accountId}&currency=${currencyName}`);
+  };
 
   return (
     <Card
@@ -24,7 +33,7 @@ function AccountCard({ account }: any) {
         minWidth: '320px',
         margin: '1vw',
       }}
-      key={id}
+      key={accountId}
     >
       <CardContent>
         <Typography
@@ -34,18 +43,19 @@ function AccountCard({ account }: any) {
           color="text.secondary"
           gutterBottom
         >
-          {id}
+          {accountId}
         </Typography>
         <Typography variant="h5" component="div">
-          {`${CURRENCY_SYMBOL[name]} ${balance.toFixed(2)}`}
+          {`${symbol} ${balance.toFixed(2)}`}
         </Typography>
         <Typography sx={{ mb: 1.5 }} color="text.secondary">
-          {name}
+          {currencyName}
         </Typography>
       </CardContent>
       <CardActions sx={{ display: 'flex' }}>
         <Button
           size="small"
+          onClick={handleButtonClick}
           sx={{
             alignSelf: 'flex-end',
             justifySelf: 'flex-end',

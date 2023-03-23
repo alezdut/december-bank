@@ -1,13 +1,10 @@
+import { Account } from '../../api/account/AccountApiResponse';
+
 export interface AccountPayload {
-  accounts: {
+  user: {
     id: number;
-    balance: number;
-    owner_id: number;
-    createdAt: string;
-    updatedAt: string;
-    currency_id: number;
-    currency: {
-      name: string;
-    };
-  }[];
+    name: string;
+    email: string;
+  };
+  accounts: Account[];
 }
